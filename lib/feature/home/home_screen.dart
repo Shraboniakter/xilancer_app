@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:xilancer_app/core/global_widget/categoriesitem.dart';
 import 'package:xilancer_app/core/global_widget/custom_texfield.dart';
 import 'package:xilancer_app/core/global_widget/custom_text.dart';
+import 'package:xilancer_app/core/global_widget/useable_card.dart';
 import 'package:xilancer_app/core/utils/assetpaths.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -95,7 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 SizedBox(height: 16.sp,),
                 CategoriesList,
-                SizedBox(height: 24.sp,),
+                SizedBox(height: 16.sp,),
                 CarouselSlider(
                   options: CarouselOptions(
                     height: 200,
@@ -224,6 +225,184 @@ class _HomeScreenState extends State<HomeScreen> {
                     );
                   }).toList(),
                 ),
+                SizedBox(height: 16.sp,),
+                Row(children: [
+                  CustomTextPoppins(text: "Popular Services",size: 20,fontWeight: FontWeight.w500,),
+                  SizedBox(width: 100,),
+                  TextButton(onPressed: (){},
+                      child:CustomTextPoppins(text: "Explore all",
+                        size: 16,fontWeight: FontWeight.w400,color: Color(0xff242B36),))
+                  
+                ],),
+
+                SizedBox(height: 16.sp,),
+                SizedBox(
+                  height: 380, // fixed height for horizontal scroll area
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal, // 👈 horizontal scroll
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                    itemCount: 6, // number of cards
+                    separatorBuilder: (context, index) => const SizedBox(width: 20),
+                    itemBuilder: (context, index) {
+                      final ValueNotifier<bool> isFavorite = ValueNotifier(false);
+
+                      return Container(
+                        height: 346,
+                        width: 320,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.2),
+                              blurRadius: 8,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Top: Image + Favorite Icon + Sponsored Tag
+                            Stack(
+                              children: [
+                                ClipRRect(
+                                  borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(12),
+                                    topRight: Radius.circular(12),
+                                  ),
+                                  child: Image.asset(
+                                    'assets/Image.png',
+                                    fit: BoxFit.cover,
+                                    height: 172,
+                                    width: double.infinity,
+                                  ),
+                                ),
+                                Positioned(
+                                  top: 12,
+                                  left: 12,
+                                  child: Container(
+                                    width: 91,
+                                    height: 26,
+                                    padding: const EdgeInsets.fromLTRB(12, 4, 12, 4),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(100),
+                                    ),
+                                    child: const Text(
+                                      "Sponsored",
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        color: Color(0xff3B4759),
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                  top: 12,
+                                  right: 12,
+                                  child: ValueListenableBuilder<bool>(
+                                    valueListenable: isFavorite,
+                                    builder: (context, value, _) {
+                                      return GestureDetector(
+                                        onTap: () {
+                                          isFavorite.value = !isFavorite.value;
+                                        },
+                                        child: Container(
+                                          padding: const EdgeInsets.all(6),
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            shape: BoxShape.circle,
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.black12,
+                                                blurRadius: 4,
+                                              ),
+                                            ],
+                                          ),
+                                          child: Icon(
+                                            value
+                                                ? Icons.favorite
+                                                : Icons.favorite_border,
+                                            color: value
+                                                ? Colors.red
+                                                : const Color(0xff3B4759),
+                                            size: 22,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                            // Middle: Product Info
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 12),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: const [
+                                      Icon(Icons.star, color: Colors.amber, size: 16),
+                                      SizedBox(width: 4),
+                                      Text(
+                                        "4.5 (23 Reviews)",
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: Color(0xff3B4759),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const Text(
+                                    "Level  2",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400,
+                                      color: Color(0xff3B4759),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                            // Bottom text
+                            Center(
+                              child: SizedBox(
+                                width: 278,
+                                height: 48,
+                                child: const Text(
+                                  "I will do professional figma design for website template....",
+                                  style: TextStyle(
+                                      fontSize: 16, fontWeight: FontWeight.w500),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+
+                            const SizedBox(height: 10),
+                            Center(
+                              child: SizedBox(
+                                width: 278,
+                                child:
+                                const Divider(height: 1, color: Color(0xff1B21291A)),
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            Center(child: Image.asset("assets/Frame.png")),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ),
+
+
+
 
 
               ],
@@ -280,6 +459,7 @@ SizedBox get CategoriesList {
       shrinkWrap: true,
       primary: false,
       scrollDirection: Axis.horizontal,
+      physics: const BouncingScrollPhysics(),
       itemBuilder: (context, index) {
         return const CategoriesItem(imagePath: "assets/images/Component 373.png" ,title: "Digital Marketing",);
       },
@@ -291,3 +471,4 @@ SizedBox get CategoriesList {
     ),
   );
 }
+
