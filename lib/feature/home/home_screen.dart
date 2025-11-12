@@ -17,12 +17,19 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   int _currentIndex = 0;
 
-
-  final List<String> imageList = [
-    "assets/images/carousel.png",
-    "assets/images/carousel.png",
-    "assets/images/carousel.png",
+  final List<Map<String, String>> categoriesData = [
+    {
+      "image": "assets/images/image 1106.png", // your person image path
+      "title1": "Find the Perfect Freelancer for",
+      "title2": "Any Project"
+    },
+    {
+      "image": "assets/images/image 1106.png",
+      "title1": "Hire Experts Instantly for",
+      "title2": "Any Task"
+    },
   ];
+
 
 
   final List<Widget> _pages = [
@@ -91,31 +98,133 @@ class _HomeScreenState extends State<HomeScreen> {
                 SizedBox(height: 24.sp,),
                 CarouselSlider(
                   options: CarouselOptions(
-                    height: 124,
+                    height: 200,
                     autoPlay: true,
                     enlargeCenterPage: true,
-                    viewportFraction: 0.9,
-                    aspectRatio: 16 / 9,
+                    viewportFraction: 0.95,
                     onPageChanged: (index, reason) {
                       setState(() {
                         _currentIndex = index;
                       });
                     },
                   ),
-                  items: imageList.map((item) {
-                    return Center(
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Image.asset(
-                          item,
-                          fit: BoxFit.cover,
-                          width: 408,
+                  items: categoriesData.asMap().entries.map((entry) {
+                    int index = entry.key;
+                    var category = entry.value;
+
+                    return Builder(
+                      builder: (BuildContext context) {
+                        return Container(
                           height: 164,
-                        ),
-                      ),
+                          width: 408,
+
+                          decoration: BoxDecoration(
+                            color: const Color(0xff007456),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Stack(
+                            children: [
+                              // Left side text + button
+                              Padding(
+                                padding:
+                                const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      category["title1"]!,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    Text(
+                                      category["title2"]!,
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    SizedBox(height: 12,),
+
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(12,8,12,8),
+                                      child: ElevatedButton(
+                                        onPressed: () {},
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.white,
+                                          foregroundColor: const Color(0xff007456),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(100),
+                                          ),
+                                        ),
+                                        child: Text("Explore Now",style: TextStyle(fontSize: 12),),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+
+                              // Right side image
+                              Positioned(
+                                top: 3,
+                                left: 212,
+                                right:0,
+                                bottom:0,
+
+
+                                child: ClipRRect(
+                                  borderRadius: const BorderRadius.only(
+                                    topRight: Radius.circular(12),
+                                    bottomRight: Radius.circular(12),
+                                  ),
+                                  child: Image.asset(
+                                    category["image"]!,
+                                    fit: BoxFit.contain,
+                                    width: 180,
+                                    height: 161,
+
+                                  ),
+                                ),
+                              ),
+
+                              // ✅ Indicator inside the card
+                              Positioned(
+                                bottom: 10,
+                                left: 0,
+                                right: 0,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: categoriesData.asMap().entries.map((dot) {
+                                    bool isActive = _currentIndex == dot.key;
+                                    return AnimatedContainer(
+                                      duration: const Duration(milliseconds: 300),
+                                      curve: Curves.easeInOut,
+                                      width: isActive ? 20.0 : 8.0,
+                                      height: 8.0,
+                                      margin:
+                                      const EdgeInsets.symmetric(horizontal: 4.0),
+                                      decoration: BoxDecoration(
+                                        color: isActive
+                                            ? const Color(0xff00AD80)
+                                            : Colors.grey,
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
                     );
                   }).toList(),
                 ),
+
 
               ],
             ),
